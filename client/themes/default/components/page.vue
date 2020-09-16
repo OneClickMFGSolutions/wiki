@@ -6,11 +6,12 @@
       :class='$vuetify.theme.dark ? `grey darken-4-d4` : `primary`'
       dark
       app
-      clipped
       mobile-breakpoint='600'
       :temporary='$vuetify.breakpoint.smAndDown'
       v-model='navShown'
       :right='$vuetify.rtl'
+      :width="400"
+      clipped
       )
       vue-scroll(:ops='scrollStyle')
         nav-sidebar(:color='$vuetify.theme.dark ? `grey darken-4-d4` : `primary`', :items='sidebarDecoded', :nav-mode='navMode')
@@ -127,25 +128,25 @@
                         v-icon(:color='$vuetify.theme.dark ? `blue-grey lighten-1` : `blue-grey darken-2`', dense) mdi-comment-plus
                     span {{$t('common:comments.newComment')}}
 
-            v-card.mb-5
-              .pa-5
-                .overline.indigo--text.d-flex(:class='$vuetify.theme.dark ? `text--lighten-3` : ``')
-                  span {{$t('common:page.lastEditedBy')}}
-                  v-spacer
-                  v-tooltip(right, v-if='isAuthenticated')
-                    template(v-slot:activator='{ on }')
-                      v-btn.btn-animate-edit(
-                        icon
-                        :href='"/h/" + locale + "/" + path'
-                        v-on='on'
-                        x-small
-                        v-if='hasReadHistoryPermission'
-                        :aria-label='$t(`common:header.history`)'
-                        )
-                        v-icon(color='indigo', dense) mdi-history
-                    span {{$t('common:header.history')}}
-                .body-2.grey--text(:class='$vuetify.theme.dark ? `` : `text--darken-3`') {{ authorName }}
-                .caption.grey--text.text--darken-1 {{ updatedAt | moment('calendar') }}
+            //- v-card.mb-5
+            //-   .pa-5
+            //-     .overline.indigo--text.d-flex(:class='$vuetify.theme.dark ? `text--lighten-3` : ``')
+            //-       span {{$t('common:page.lastEditedBy')}}
+            //-       v-spacer
+            //-       v-tooltip(right, v-if='isAuthenticated')
+            //-         template(v-slot:activator='{ on }')
+            //-           v-btn.btn-animate-edit(
+            //-             icon
+            //-             :href='"/h/" + locale + "/" + path'
+            //-             v-on='on'
+            //-             x-small
+            //-             v-if='hasReadHistoryPermission'
+            //-             :aria-label='$t(`common:header.history`)'
+            //-             )
+            //-             v-icon(color='indigo', dense) mdi-history
+            //-         span {{$t('common:header.history')}}
+            //-     .body-2.grey--text(:class='$vuetify.theme.dark ? `` : `text--darken-3`') {{ authorName }}
+            //-     .caption.grey--text.text--darken-1 {{ updatedAt | moment('calendar') }}
 
             //- v-card.mb-5
             //-   .pa-5
@@ -163,10 +164,10 @@
             v-card(flat)
               v-toolbar(:color='$vuetify.theme.dark ? `grey darken-4-d3` : `grey lighten-3`', flat, dense)
                 v-spacer
-                v-tooltip(bottom)
-                  template(v-slot:activator='{ on }')
-                    v-btn(icon, tile, v-on='on', :aria-label='$t(`common:page.bookmark`)'): v-icon(color='grey') mdi-bookmark
-                  span {{$t('common:page.bookmark')}}
+                //- v-tooltip(bottom)
+                //-   template(v-slot:activator='{ on }')
+                //-     v-btn(icon, tile, v-on='on', :aria-label='$t(`common:page.bookmark`)'): v-icon(color='grey') mdi-bookmark
+                //-   span {{$t('common:page.bookmark')}}
                 v-menu(offset-y, bottom, min-width='300')
                   template(v-slot:activator='{ on: menu }')
                     v-tooltip(bottom)
@@ -304,127 +305,129 @@
 </template>
 
 <script>
-import { StatusIndicator } from 'vue-status-indicator'
-import Tabset from './tabset.vue'
-import NavSidebar from './nav-sidebar.vue'
-import Prism from 'prismjs'
-import mermaid from 'mermaid'
-import { get, sync } from 'vuex-pathify'
-import _ from 'lodash'
-import ClipboardJS from 'clipboard'
-import Vue from 'vue'
+import { StatusIndicator } from "vue-status-indicator";
+import Tabset from "./tabset.vue";
+import NavSidebar from "./nav-sidebar.vue";
+import Prism from "prismjs";
+import mermaid from "mermaid";
+import { get, sync } from "vuex-pathify";
+import _ from "lodash";
+import ClipboardJS from "clipboard";
+import Vue from "vue";
 
-Vue.component('tabset', Tabset)
+Vue.component("tabset", Tabset);
 
-Prism.plugins.autoloader.languages_path = '/_assets/js/prism/'
+Prism.plugins.autoloader.languages_path = "/_assets/js/prism/";
 Prism.plugins.NormalizeWhitespace.setDefaults({
-  'remove-trailing': true,
-  'remove-indent': true,
-  'left-trim': true,
-  'right-trim': true,
-  'remove-initial-line-feed': true,
-  'tabs-to-spaces': 2
-})
-Prism.plugins.toolbar.registerButton('copy-to-clipboard', (env) => {
-  let linkCopy = document.createElement('button')
-  linkCopy.textContent = 'Copy'
+  "remove-trailing": true,
+  "remove-indent": true,
+  "left-trim": true,
+  "right-trim": true,
+  "remove-initial-line-feed": true,
+  "tabs-to-spaces": 2,
+});
+Prism.plugins.toolbar.registerButton("copy-to-clipboard", (env) => {
+  let linkCopy = document.createElement("button");
+  linkCopy.textContent = "Copy";
 
   const clip = new ClipboardJS(linkCopy, {
-    text: () => { return env.code }
-  })
+    text: () => {
+      return env.code;
+    },
+  });
 
-  clip.on('success', () => {
-    linkCopy.textContent = 'Copied!'
-    resetClipboardText()
-  })
-  clip.on('error', () => {
-    linkCopy.textContent = 'Press Ctrl+C to copy'
-    resetClipboardText()
-  })
+  clip.on("success", () => {
+    linkCopy.textContent = "Copied!";
+    resetClipboardText();
+  });
+  clip.on("error", () => {
+    linkCopy.textContent = "Press Ctrl+C to copy";
+    resetClipboardText();
+  });
 
-  return linkCopy
+  return linkCopy;
 
   function resetClipboardText() {
     setTimeout(() => {
-      linkCopy.textContent = 'Copy'
-    }, 5000)
+      linkCopy.textContent = "Copy";
+    }, 5000);
   }
-})
+});
 
 export default {
   components: {
     NavSidebar,
-    StatusIndicator
+    StatusIndicator,
   },
   props: {
     pageId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     locale: {
       type: String,
-      default: 'en'
+      default: "en",
     },
     path: {
       type: String,
-      default: 'home'
+      default: "home",
     },
     title: {
       type: String,
-      default: 'Untitled Page'
+      default: "Untitled Page",
     },
     description: {
       type: String,
-      default: ''
+      default: "",
     },
     createdAt: {
       type: String,
-      default: ''
+      default: "",
     },
     updatedAt: {
       type: String,
-      default: ''
+      default: "",
     },
     tags: {
       type: Array,
-      default: () => ([])
+      default: () => [],
     },
     authorName: {
       type: String,
-      default: 'Unknown'
+      default: "Unknown",
     },
     authorId: {
       type: Number,
-      default: 0
+      default: 0,
     },
     isPublished: {
       type: Boolean,
-      default: false
+      default: false,
     },
     toc: {
       type: String,
-      default: ''
+      default: "",
     },
     sidebar: {
       type: String,
-      default: ''
+      default: "",
     },
     navMode: {
       type: String,
-      default: 'MIXED'
+      default: "MIXED",
     },
     commentsEnabled: {
       type: Boolean,
-      default: false
+      default: false,
     },
     effectivePermissions: {
       type: String,
-      default: ''
+      default: "",
     },
     commentsExternal: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -435,198 +438,229 @@ export default {
       scrollOpts: {
         duration: 1500,
         offset: 0,
-        easing: 'easeInOutCubic'
+        easing: "easeInOutCubic",
       },
       scrollStyle: {
         vuescroll: {},
         scrollPanel: {
           initialScrollX: 0.01, // fix scrollbar not disappearing on load
           scrollingX: false,
-          speed: 50
+          speed: 50,
         },
         rail: {
-          gutterOfEnds: '2px'
+          gutterOfEnds: "2px",
         },
         bar: {
           onlyShowBarOnScroll: false,
-          background: '#42A5F5',
+          background: "#42A5F5",
           hoverStyle: {
-            background: '#64B5F6'
-          }
-        }
+            background: "#64B5F6",
+          },
+        },
       },
-      winWidth: 0
-    }
+      winWidth: 0,
+    };
   },
   computed: {
-    isAuthenticated: get('user/authenticated'),
-    commentsCount: get('page/commentsCount'),
-    commentsPerms: get('page/effectivePermissions@comments'),
+    isAuthenticated: get("user/authenticated"),
+    commentsCount: get("page/commentsCount"),
+    commentsPerms: get("page/effectivePermissions@comments"),
     rating: {
-      get () {
-        return 3.5
+      get() {
+        return 3.5;
       },
-      set (val) {
-
-      }
+      set(val) {},
     },
     breadcrumbs() {
-      return [{ path: '/', name: 'Home' }].concat(_.reduce(this.path.split('/'), (result, value, key) => {
-        result.push({
-          path: _.get(_.last(result), 'path', `/${this.locale}`) + `/${value}`,
-          name: value
-        })
-        return result
-      }, []))
+      return [{ path: "/", name: "Home" }].concat(
+        _.reduce(
+          this.path.split("/"),
+          (result, value, key) => {
+            result.push({
+              path:
+                _.get(_.last(result), "path", `/${this.locale}`) + `/${value}`,
+              name: value,
+            });
+            return result;
+          },
+          []
+        )
+      );
     },
-    pageUrl () { return window.location.href },
-    upBtnPosition () {
+    pageUrl() {
+      return window.location.href;
+    },
+    upBtnPosition() {
       if (this.$vuetify.breakpoint.mdAndUp) {
-        return this.$vuetify.rtl ? `right: 235px;` : `left: 235px;`
+        return this.$vuetify.rtl ? `right: 235px;` : `left: 235px;`;
       } else {
-        return this.$vuetify.rtl ? `right: 65px;` : `left: 65px;`
+        return this.$vuetify.rtl ? `right: 65px;` : `left: 65px;`;
       }
     },
-    sidebarDecoded () {
-      return JSON.parse(Buffer.from(this.sidebar, 'base64').toString())
+    sidebarDecoded() {
+      return JSON.parse(Buffer.from(this.sidebar, "base64").toString());
     },
-    tocDecoded () {
-      return JSON.parse(Buffer.from(this.toc, 'base64').toString())
+    tocDecoded() {
+      return JSON.parse(Buffer.from(this.toc, "base64").toString());
     },
-    hasAdminPermission: get('page/effectivePermissions@system.manage'),
-    hasWritePagesPermission: get('page/effectivePermissions@pages.write'),
-    hasManagePagesPermission: get('page/effectivePermissions@pages.manage'),
-    hasDeletePagesPermission: get('page/effectivePermissions@pages.delete'),
-    hasReadSourcePermission: get('page/effectivePermissions@source.read'),
-    hasReadHistoryPermission: get('page/effectivePermissions@history.read'),
-    hasAnyPagePermissions () {
-      return this.hasAdminPermission || this.hasWritePagesPermission || this.hasManagePagesPermission ||
-        this.hasDeletePagesPermission || this.hasReadSourcePermission || this.hasReadHistoryPermission
+    hasAdminPermission: get("page/effectivePermissions@system.manage"),
+    hasWritePagesPermission: get("page/effectivePermissions@pages.write"),
+    hasManagePagesPermission: get("page/effectivePermissions@pages.manage"),
+    hasDeletePagesPermission: get("page/effectivePermissions@pages.delete"),
+    hasReadSourcePermission: get("page/effectivePermissions@source.read"),
+    hasReadHistoryPermission: get("page/effectivePermissions@history.read"),
+    hasAnyPagePermissions() {
+      return (
+        this.hasAdminPermission ||
+        this.hasWritePagesPermission ||
+        this.hasManagePagesPermission ||
+        this.hasDeletePagesPermission ||
+        this.hasReadSourcePermission ||
+        this.hasReadHistoryPermission
+      );
     },
-    printView: sync('site/printView')
+    printView: sync("site/printView"),
   },
   created() {
-    this.$store.set('page/authorId', this.authorId)
-    this.$store.set('page/authorName', this.authorName)
-    this.$store.set('page/createdAt', this.createdAt)
-    this.$store.set('page/description', this.description)
-    this.$store.set('page/isPublished', this.isPublished)
-    this.$store.set('page/id', this.pageId)
-    this.$store.set('page/locale', this.locale)
-    this.$store.set('page/path', this.path)
-    this.$store.set('page/tags', this.tags)
-    this.$store.set('page/title', this.title)
-    this.$store.set('page/updatedAt', this.updatedAt)
+    this.$store.set("page/authorId", this.authorId);
+    this.$store.set("page/authorName", this.authorName);
+    this.$store.set("page/createdAt", this.createdAt);
+    this.$store.set("page/description", this.description);
+    this.$store.set("page/isPublished", this.isPublished);
+    this.$store.set("page/id", this.pageId);
+    this.$store.set("page/locale", this.locale);
+    this.$store.set("page/path", this.path);
+    this.$store.set("page/tags", this.tags);
+    this.$store.set("page/title", this.title);
+    this.$store.set("page/updatedAt", this.updatedAt);
     if (this.effectivePermissions) {
-      this.$store.set('page/effectivePermissions', JSON.parse(Buffer.from(this.effectivePermissions, 'base64').toString()))
+      this.$store.set(
+        "page/effectivePermissions",
+        JSON.parse(Buffer.from(this.effectivePermissions, "base64").toString())
+      );
     }
 
-    this.$store.set('page/mode', 'view')
+    this.$store.set("page/mode", "view");
   },
-  mounted () {
+  mounted() {
     if (this.$vuetify.theme.dark) {
-      this.scrollStyle.bar.background = '#424242'
+      this.scrollStyle.bar.background = "#424242";
     }
 
     // -> Check side navigation visibility
-    this.handleSideNavVisibility()
-    window.addEventListener('resize', _.debounce(() => {
-      this.handleSideNavVisibility()
-    }, 500))
+    this.handleSideNavVisibility();
+    window.addEventListener(
+      "resize",
+      _.debounce(() => {
+        this.handleSideNavVisibility();
+      }, 500)
+    );
 
     // -> Highlight Code Blocks
-    Prism.highlightAllUnder(this.$refs.container)
+    Prism.highlightAllUnder(this.$refs.container);
 
     // -> Render Mermaid diagrams
     mermaid.mermaidAPI.initialize({
       startOnLoad: true,
-      theme: this.$vuetify.theme.dark ? `dark` : `default`
-    })
+      theme: this.$vuetify.theme.dark ? `dark` : `default`,
+    });
 
     // -> Handle anchor scrolling
     if (window.location.hash && window.location.hash.length > 1) {
-      if (document.readyState === 'complete') {
+      if (document.readyState === "complete") {
         this.$nextTick(() => {
-          this.$vuetify.goTo(window.location.hash, this.scrollOpts)
-        })
+          this.$vuetify.goTo(window.location.hash, this.scrollOpts);
+        });
       } else {
-        window.addEventListener('load', () => {
-          this.$vuetify.goTo(window.location.hash, this.scrollOpts)
-        })
+        window.addEventListener("load", () => {
+          this.$vuetify.goTo(window.location.hash, this.scrollOpts);
+        });
       }
     }
 
     // -> Handle anchor links within the page contents
     this.$nextTick(() => {
-      this.$refs.container.querySelectorAll(`a[href^="#"], a[href^="${window.location.href.replace(window.location.hash, '')}#"]`).forEach(el => {
-        el.onclick = ev => {
-          ev.preventDefault()
-          ev.stopPropagation()
-          this.$vuetify.goTo(decodeURIComponent(ev.target.hash), this.scrollOpts)
-        }
-      })
-    })
+      this.$refs.container
+        .querySelectorAll(
+          `a[href^="#"], a[href^="${window.location.href.replace(
+            window.location.hash,
+            ""
+          )}#"]`
+        )
+        .forEach((el) => {
+          el.onclick = (ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            this.$vuetify.goTo(
+              decodeURIComponent(ev.target.hash),
+              this.scrollOpts
+            );
+          };
+        });
+    });
   },
   methods: {
-    goHome () {
-      window.location.assign('/')
+    goHome() {
+      window.location.assign("/");
     },
-    toggleNavigation () {
-      this.navOpen = !this.navOpen
+    toggleNavigation() {
+      this.navOpen = !this.navOpen;
     },
-    upBtnScroll () {
-      const scrollOffset = window.pageYOffset || document.documentElement.scrollTop
-      this.upBtnShown = scrollOffset > window.innerHeight * 0.33
+    upBtnScroll() {
+      const scrollOffset =
+        window.pageYOffset || document.documentElement.scrollTop;
+      this.upBtnShown = scrollOffset > window.innerHeight * 0.33;
     },
-    print () {
+    print() {
       if (this.printView) {
-        this.printView = false
+        this.printView = false;
       } else {
-        this.printView = true
+        this.printView = true;
         this.$nextTick(() => {
-          window.print()
-        })
+          window.print();
+        });
       }
     },
-    pageEdit () {
-      this.$root.$emit('pageEdit')
+    pageEdit() {
+      this.$root.$emit("pageEdit");
     },
-    pageHistory () {
-      this.$root.$emit('pageHistory')
+    pageHistory() {
+      this.$root.$emit("pageHistory");
     },
-    pageSource () {
-      this.$root.$emit('pageSource')
+    pageSource() {
+      this.$root.$emit("pageSource");
     },
-    pageDuplicate () {
-      this.$root.$emit('pageDuplicate')
+    pageDuplicate() {
+      this.$root.$emit("pageDuplicate");
     },
-    pageMove () {
-      this.$root.$emit('pageMove')
+    pageMove() {
+      this.$root.$emit("pageMove");
     },
-    pageDelete () {
-      this.$root.$emit('pageDelete')
+    pageDelete() {
+      this.$root.$emit("pageDelete");
     },
-    handleSideNavVisibility () {
-      if (window.innerWidth === this.winWidth) { return }
-      this.winWidth = window.innerWidth
+    handleSideNavVisibility() {
+      if (window.innerWidth === this.winWidth) {
+        return;
+      }
+      this.winWidth = window.innerWidth;
       if (this.$vuetify.breakpoint.mdAndUp) {
-        this.navShown = true
+        this.navShown = true;
       } else {
-        this.navShown = false
+        this.navShown = false;
       }
     },
-    goToComments (focusNewComment = false) {
-      this.$vuetify.goTo('#discussion', this.scrollOpts)
+    goToComments(focusNewComment = false) {
+      this.$vuetify.goTo("#discussion", this.scrollOpts);
       if (focusNewComment) {
-        document.querySelector('#discussion-new').focus()
+        document.querySelector("#discussion-new").focus();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-
 .breadcrumbs-nav {
   .v-btn {
     min-width: 0;
@@ -656,4 +690,36 @@ export default {
   display: none;
 }
 
+.v-main__wrap {
+  display: flex;
+  flex-flow: column;
+
+  .v-toolbar {
+    flex: 0 1 auto;
+  }
+}
+
+.container:not(:nth-of-type(1)) {
+  flex: 1;
+
+  .row {
+    height: 100%;
+  }
+
+  .contents {
+    display: flex;
+    flex-flow: column;
+
+    height: 100%;
+
+    div:nth-of-type(1) {
+      flex: 1;
+    }
+  }
+
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>
