@@ -1,0 +1,1 @@
+docker save mackay-mfg/osmium:latest | gzip > osmium_latest.tar.gz

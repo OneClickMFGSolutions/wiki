@@ -1,0 +1,14 @@
+node_modules/
+.devcontainer/
+.github/
+.git/
+.vscode/
+.webpack-cache/
+scripts/
+
+npm-debug.log
+Dockerfile
+
+README.md
+.dockerignore
+.gitignore
