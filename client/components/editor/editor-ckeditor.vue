@@ -23,7 +23,7 @@
 <script>
 import _ from "lodash";
 import { get, sync } from "vuex-pathify";
-import DecoupledEditor from '@requarks/ckeditor5'
+import DecoupledEditor from "@requarks/ckeditor5";
 import EditorConflict from "./ckeditor/conflict.vue";
 import { html as beautify } from "js-beautify/js/lib/beautifier.min.js";
 
@@ -77,6 +77,10 @@ export default {
       language: this.locale,
       placeholder: "Type the page content here",
       disableNativeSpellChecker: false,
+
+      link: {
+        addTargetToExternalLinks: true,
+      },
 
       mediaEmbed: {
         previewsInData: true,
@@ -149,7 +153,21 @@ export default {
 
     this.$root.$on("editorInsert", (opts) => {
       if (opts.path.endsWith(".mp4") || opts.path.endsWith(".pdf")) {
-        this.editor.execute("mediaEmbed", opts.path);
+        const { model } = this.editor;
+        model.change((writer) => {
+          const url = window.location.origin + "/" + opts.path;
+          writer.insertText(
+            "Open in New Tab",
+            { linkHref: url },
+            model.document.selection.getFirstPosition()
+          );
+          this.editor.execute("mediaEmbed", opts.path);
+          writer.append(
+            writer.createElement("paragraph"),
+            model.document.getRoot()
+          );
+        });
+
         return;
       }
 

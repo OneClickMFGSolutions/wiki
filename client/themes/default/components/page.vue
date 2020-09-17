@@ -282,26 +282,26 @@
                 span {{$t('common:comments.title')}}
               .comments-main
                 slot(name='comments')
-    nav-footer
-    notify
-    search-results
-    v-fab-transition
-      v-btn(
-        v-if='upBtnShown'
-        fab
-        fixed
-        bottom
-        :right='$vuetify.rtl'
-        :left='!$vuetify.rtl'
-        small
-        :depressed='this.$vuetify.breakpoint.mdAndUp'
-        @click='$vuetify.goTo(0, scrollOpts)'
-        color='primary'
-        dark
-        :style='upBtnPosition'
-        :aria-label='$t(`common:actions.returnToTop`)'
-        )
-        v-icon mdi-arrow-up
+    //- nav-footer
+    //- notify
+    //- search-results
+    //- v-fab-transition
+    //-   v-btn(
+    //-     v-if='upBtnShown'
+    //-     fab
+    //-     fixed
+    //-     bottom
+    //-     :right='$vuetify.rtl'
+    //-     :left='!$vuetify.rtl'
+    //-     small
+    //-     :depressed='this.$vuetify.breakpoint.mdAndUp'
+    //-     @click='$vuetify.goTo(0, scrollOpts)'
+    //-     color='primary'
+    //-     dark
+    //-     :style='upBtnPosition'
+    //-     :aria-label='$t(`common:actions.returnToTop`)'
+    //-     )
+    //-     v-icon mdi-arrow-up
 </template>
 
 <script>
