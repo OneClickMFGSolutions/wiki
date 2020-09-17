@@ -709,12 +709,27 @@ export default {
   .contents {
     display: flex;
     flex-flow: column;
-
     height: 100%;
 
-    div:nth-of-type(1) {
-      flex: 1;
+    > div:nth-child(1) {
+      height: 100%;
+      width: 100%;
     }
+
+    figure.media {
+      height: 100%;
+      width: 100%;
+
+      div {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  video {
+    max-width: 100%;
+    max-height: 65vh;
   }
 
   iframe {
